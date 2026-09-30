@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  OWASP Dependency-Check suppression file.
+  Add ONLY reviewed false positives here, each with a reason and (ideally) an expiry date, e.g.:
+
+  <suppress until="2027-06-30Z">
+    <notes>CVE-XXXX-YYYY does not apply: vulnerable class is not used by this project.</notes>
+    <packageUrl regex="true">^pkg:maven/com\.example/some\-lib@.*$</packageUrl>
+    <cve>CVE-XXXX-YYYY</cve>
+  </suppress>
+-->
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+</suppressions>

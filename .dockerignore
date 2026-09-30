@@ -1,0 +1,11 @@
+**/target/
+**/node_modules/
+frontend-service/build/
+.git
+.gitignore
+.idea
+.vscode
+*.log
+.env
+jenkins/
+*.postman_collection.json

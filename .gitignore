@@ -1,0 +1,22 @@
+# Maven
+**/target/
+
+# Node
+**/node_modules/
+
+# VS Code
+.vscode/
+
+# React build
+frontend-service/build/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+# Local secrets / reports
+.env
+.m2/
+dependency-check-data/

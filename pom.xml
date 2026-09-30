@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.4.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.javamultiplex</groupId>
+    <artifactId>online-blood-donation-system-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>online-blood-donation-system-parent</name>
+    <description>Aggregator / parent POM: build, test coverage, OWASP scan and SonarQube analysis</description>
+
+    <modules>
+        <module>common-lib</module>
+        <module>address-service</module>
+        <module>backend-service</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <jacoco.version>0.8.8</jacoco.version>
+        <dependency-check.version>10.0.4</dependency-check.version>
+        <sonar-maven.version>3.9.1.2184</sonar-maven.version>
+
+        <!-- OWASP Dependency-Check: 11 = report only (CVSS max is 10). Lower it (e.g. 7) to fail the build. -->
+        <dependency-check.failBuildOnCVSS>11</dependency-check.failBuildOnCVSS>
+        <!-- Optional NVD API key (strongly recommended, otherwise NVD updates are very slow) -->
+        <nvd.api.key/>
+
+        <!-- SonarQube (host/token are supplied by Jenkins via withSonarQubeEnv or -D flags) -->
+        <sonar.projectKey>online-blood-donation-system</sonar.projectKey>
+        <sonar.projectName>Online Blood Donation System</sonar.projectName>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.exclusions>**/entity/**,**/model/**,**/Application.java</sonar.exclusions>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- Unit-test coverage (feeds SonarQube) -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- OWASP Dependency-Check: run with `mvn dependency-check:aggregate` (not bound to a phase) -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${dependency-check.version}</version>
+                <configuration>
+                    <format>ALL</format>
+                    <failBuildOnCVSS>${dependency-check.failBuildOnCVSS}</failBuildOnCVSS>
+                    <nvdApiKey>${nvd.api.key}</nvdApiKey>
+                    <suppressionFiles>
+                        <suppressionFile>${maven.multiModuleProjectDirectory}/security/dependency-check-suppressions.xml</suppressionFile>
+                    </suppressionFiles>
+                    <skipTestScope>true</skipTestScope>
+                    <skipProvidedScope>true</skipProvidedScope>
+                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+                </configuration>
+            </plugin>
+
+            <!-- SonarQube: run with `mvn sonar:sonar` -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-maven.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
